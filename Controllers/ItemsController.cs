@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CarsReminder.Data;
 using CarsReminder.Models;
 using CarsReminder.ModelView;
+using Microsoft.AspNetCore.Routing;
 
 namespace CarsReminder.Controllers
 {
@@ -21,32 +22,55 @@ namespace CarsReminder.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string data)
         {
-            var currentContext = await _context.ItemsToRemind.ToListAsync();
-            var markgroups = currentContext.GroupBy(n => n.Mark).ToList();
-            var modelgroups = currentContext.GroupBy(n => n.Model).ToList();
+            var currentContext = new List<Item>();
+
+            if (!string.IsNullOrEmpty(data))
+            {
+                currentContext = await _context.ItemsToRemind.Where(n => n.Mark == data || n.Model == data).ToListAsync();
+            }
+            else
+                currentContext = await _context.ItemsToRemind.ToListAsync();
+
 
             var itemsModelView = new IndexContextModelView();
-            itemsModelView.ItemList = currentContext;
+            var groups = new Dictionary<string, string>();
+            
+            //group by mark
+            var markgroups = currentContext.GroupBy(n => n.Mark).ToList();
+            foreach (var item in markgroups)
+            {
+                groups.Add(item.Key, "mark");
+            }
+            
+            //group by model
+            var modelgroups = currentContext.GroupBy(n => n.Model).ToList();
+            foreach (var item in modelgroups)
+            {
+                groups.Add(item.Key, "model");
+            }
 
+            //send data to modelview
+            itemsModelView.ItemList = currentContext;
+            itemsModelView.Groups = groups;
 
             return View(itemsModelView);
         }
 
-        // GET: Filtered options
-        //public async Task<IActionResult> Filtered()
-        //{
-        //    var currentContext = await _context.ItemsToRemind.ToListAsync();
-
-        //    var markgroups = currentContext.GroupBy(n => n.Mark).ToList();
-        //    var modelgroups = currentContext.GroupBy(n => n.Model).ToList();
+       [HttpGet]
+        public async Task<IActionResult> Filtered(string data)
+        {
             
 
+            var routeValues = new RouteValueDictionary {
+                { "data", data},
+            };
 
-        //    return View();           
+            //return RedirectToAction("Index", filteredContext);
 
-        //}
+            return RedirectToAction("Index", routeValues);
+        }
 
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)

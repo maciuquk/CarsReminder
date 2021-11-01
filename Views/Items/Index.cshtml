@@ -8,7 +8,12 @@
 
 <p>
     <a class="btn btn-primary" asp-action="Create" role="button">Dodaj nowy samochód</a>
-    <a class="btn btn-secondary" asp-action="Filtered" role="button">Filtruj samochody</a>
+
+    @foreach (var item in Model.Groups)
+    {
+        <a class="btn btn-secondary" asp-action="Filtered" asp-route-data="@item.Key" role="button" >@item.Key</a>
+    }
+
 </p>
 <table class="table">
     <thead>

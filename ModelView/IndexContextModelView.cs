@@ -9,5 +9,6 @@ namespace CarsReminder.ModelView
     public class IndexContextModelView
     {
         public List<Item> ItemList{ get; set; }
+        public Dictionary<string, string> Groups { get; set; }
     }
 }

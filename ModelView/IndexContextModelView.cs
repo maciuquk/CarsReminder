@@ -10,5 +10,6 @@ namespace CarsReminder.ModelView
     {
         public List<Item> ItemList{ get; set; }
         public Dictionary<string, string> Groups { get; set; }
+        public bool IsFilteredList { get; set; }
     }
 }

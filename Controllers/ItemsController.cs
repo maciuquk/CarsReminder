@@ -25,10 +25,11 @@ namespace CarsReminder.Controllers
         public async Task<IActionResult> Index(string data)
         {
             var currentContext = new List<Item>();
-
+            bool isFilteredList = false;
             if (!string.IsNullOrEmpty(data))
             {
                 currentContext = await _context.ItemsToRemind.Where(n => n.Mark == data || n.Model == data).ToListAsync();
+                isFilteredList = true;
             }
             else
                 currentContext = await _context.ItemsToRemind.ToListAsync();
@@ -54,6 +55,7 @@ namespace CarsReminder.Controllers
             //send data to modelview
             itemsModelView.ItemList = currentContext;
             itemsModelView.Groups = groups;
+            itemsModelView.IsFilteredList = isFilteredList;
 
             return View(itemsModelView);
         }

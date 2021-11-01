@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CarsReminder.Models.Item>
+﻿@model CarsReminder.ModelView.IndexContextModelView
 
 @{
     ViewData["Title"] = "Index";
@@ -14,29 +14,29 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PhotoUrl)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().PhotoUrl)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Mark)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().Mark)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Model)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().Model)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distance)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().Distance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.ItemList.FirstOrDefault().Description)
             </th>
 
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.ItemList) {
         <tr>
             <td>
                 @*@Html.DisplayFor(modelItem => item.PhotoUrl)*@

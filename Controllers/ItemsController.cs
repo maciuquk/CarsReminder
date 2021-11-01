@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarsReminder.Data;
 using CarsReminder.Models;
+using CarsReminder.ModelView;
 
 namespace CarsReminder.Controllers
 {
@@ -22,8 +23,30 @@ namespace CarsReminder.Controllers
         // GET: Items
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ItemsToRemind.ToListAsync());
+            var currentContext = await _context.ItemsToRemind.ToListAsync();
+            var markgroups = currentContext.GroupBy(n => n.Mark).ToList();
+            var modelgroups = currentContext.GroupBy(n => n.Model).ToList();
+
+            var itemsModelView = new IndexContextModelView();
+            itemsModelView.ItemList = currentContext;
+
+
+            return View(itemsModelView);
         }
+
+        // GET: Filtered options
+        //public async Task<IActionResult> Filtered()
+        //{
+        //    var currentContext = await _context.ItemsToRemind.ToListAsync();
+
+        //    var markgroups = currentContext.GroupBy(n => n.Mark).ToList();
+        //    var modelgroups = currentContext.GroupBy(n => n.Model).ToList();
+            
+
+
+        //    return View();           
+
+        //}
 
         // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
